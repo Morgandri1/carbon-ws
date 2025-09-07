@@ -16,7 +16,7 @@ async fn chat(socket: WebSocket, user: User) {
     tokio::spawn(async move {
         let (tx,mut rx) = socket.split();
         let mut connected = CONNECTED.lock().await;
-        let u = WebSocketUser::new(tx, user.username.clone());
+        let u = WebSocketUser::new(tx);
         connected.insert(user.id, u.clone());
         let conn = &mut establish_connection();
         while let Some(msg) = rx.next().await {

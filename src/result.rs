@@ -13,6 +13,7 @@ pub enum CarbonError {
     UserError { message: String, code: u16 },
     DatabaseError { message: String },
     ExternalError { message: String, service: String },
+    InternalError { message: String }
 }
 
 impl Display for CarbonError {
@@ -23,6 +24,7 @@ impl Display for CarbonError {
             CarbonError::UserError { message, code } => write!(f, "User error: {} (code: {})", message, code),
             CarbonError::DatabaseError { message } => write!(f, "Database error: {}", message),
             CarbonError::ExternalError { message, service } => write!(f, "External error: {} (service: {})", message, service),
+            CarbonError::InternalError { message } => write!(f, "Internal error: {}", message),
         }
     }
 }

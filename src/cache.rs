@@ -11,14 +11,12 @@ use crate::result::{CarbonError, CarbonResult};
 #[derive(Clone,)]
 pub struct WebSocketUser {
     pub socket: Arc<Mutex<Option<SplitSink<WebSocket, Message>>>>,
-    pub username: String,
 }
 
 impl WebSocketUser {
-    pub fn new(tx: SplitSink<WebSocket,Message>, username: String) -> Self {
+    pub fn new(tx: SplitSink<WebSocket,Message>) -> Self {
         Self {
             socket: Arc::new(Mutex::new(Some(tx))),
-            username,
         }
     }
     

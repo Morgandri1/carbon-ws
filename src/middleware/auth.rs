@@ -14,7 +14,7 @@ pub fn with_user() -> impl Filter<Extract = (User,), Error = warp::Rejection> + 
             match verify_jwt(&auth, &DECODING_KEY) {
                 Ok(data) => {
                     let conn = &mut establish_connection();
-                    let user = users::table.find(data.claims.id)
+                    let user = users::table.find(data.claims.inner().id)
                         .first::<User>(conn)
                         .optional()
                         .map_err(|_| CarbonError::DatabaseError { message: "failed to load users".to_string() }.reject())?;
