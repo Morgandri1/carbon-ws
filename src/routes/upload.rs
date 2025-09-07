@@ -8,8 +8,9 @@ use crate::{constants::BUCKET_URL, result::{CarbonError, CarbonResult}};
 /// Upload a PNG buffer 
 pub async fn upload_png_buffer(user_id: Uuid, buf: Vec<u8>) -> CarbonResult<String> {
     let client = HttpClient::new();
-    let resp = client.post(BUCKET_URL.as_str().to_string() + "/upload/" + &user_id.to_string())
+    let resp = client.post(BUCKET_URL.as_str().to_string() + "upload")
         .header("Content-Type", "image/png")
+        .header("filename", user_id.to_string() + ".png")
         .body(buf)
         .send()
         .await
@@ -17,13 +18,7 @@ pub async fn upload_png_buffer(user_id: Uuid, buf: Vec<u8>) -> CarbonResult<Stri
     if !resp.status().is_success() {
         return Err(CarbonError::InternalError { message: "Failed to upload image".to_string() });
     }
-    let json = serde_json::from_str::<serde_json::Value>(&resp.text().await.map_err(|_| {
-        CarbonError::InternalError { message: "Failed to parse response".to_string() }
-    })?).map_err(|_| CarbonError::SerializerError)?;
-    let id = json["id"].as_str().ok_or_else(|| {
-        CarbonError::InternalError { message: "Failed to parse response".to_string() }
-    })?;
-    Ok(id.to_string())
+    Ok(BUCKET_URL.as_str().to_string() + "download/" + &user_id.to_string() + ".png")
 }
 
 /// Download an image from a URL and convert it to PNG
