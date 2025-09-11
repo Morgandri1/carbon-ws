@@ -2,4 +2,4 @@
 pkgs = ["...", "postgresql.lib"]
 
 [phases.setup]
-nixLibs = ["..", "postgresql.lib"]
+nixLibs = ["...", "postgresql.lib"]
