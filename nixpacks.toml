@@ -1,2 +1,5 @@
 [packages] 
 pkgs = ["...", "postgresql.lib"]
+
+[phases.setup]
+nixLibs = ["..", "postgresql.lib"]
